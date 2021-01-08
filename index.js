@@ -23,13 +23,13 @@ app.get("/api/categories/:id", (req, res) => {
 });
 
 app.post("/api/categories", (req, res) => {
-    const { error } = validateCategory(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    const category = { id: categories.length + 1, title: req.body.title };
-    categories.push(category);
-  
-    res.status(201).send(category);
-  });
+  const { error } = validateCategory(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const category = { id: categories.length + 1, title: req.body.title };
+  categories.push(category);
+
+  res.status(201).send(category);
+});
 
 app.put("/api/categories/:id", (req, res) => {
   const { error } = validateCategory(req.body);
@@ -38,6 +38,16 @@ app.put("/api/categories/:id", (req, res) => {
   const category = categories.find((ctg) => ctg.id === parseInt(req.params.id));
   if (!category) return res.status(404).send("Not found such category");
   category.title = req.body.title;
+
+  res.send(category);
+});
+
+app.delete("/api/categories/:id", (req, res) => {
+  const category = categories.find((ctg) => ctg.id === parseInt(req.params.id));
+  if (!category) return res.status(404).send("Not found such category");
+
+  const categoryIndex = categories.indexOf(category);
+  categories.splice(categoryIndex, 1);
 
   res.send(category);
 });
