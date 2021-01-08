@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 const app = express();
 
 const categories = [
@@ -20,4 +21,20 @@ app.get("/api/categories/:id", (req, res) => {
   res.send(category);
 });
 
+app.post("/api/categories", (req, res) => {
+    const { error } = validateCategory(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+    
+    const category = {id: categories.length + 1, title: req.body.title};
+    categories.push(category);
 
+    res.status(201).send(category);
+});
+
+function validateCategory(category) {
+    const schema = {
+        title: Joi.string().required().min(4)
+    }
+
+    return Joi.validate(category, schema);
+}
