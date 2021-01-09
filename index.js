@@ -1,64 +1,21 @@
+const mongoose = require("mongoose");
 const express = require("express");
-const Joi = require("joi");
+const categoriesRoute = require("./routes/categories");
 const app = express();
 app.use(express.json());
+app.use("/api/categories", categoriesRoute);
 
-const categories = [
-  { id: 1, title: "data consistency" },
-  { id: 2, title: "Algorithms and DS" },
-  { id: 3, title: "Client-side development" },
-  { id: 4, title: "Server-side development" },
-  { id: 5, title: "Full stack development" },
-];
-
-app.get("/api/categories", (req, res) => {
-  res.send(categories);
-});
-
-app.get("/api/categories/:id", (req, res) => {
-  const category = categories.find((ctg) => ctg.id === parseInt(req.params.id));
-  if (!category) return res.status(404).send("Oops! Not found such category");
-
-  res.send(category);
-});
-
-app.post("/api/categories", (req, res) => {
-  const { error } = validateCategory(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-  const category = { id: categories.length + 1, title: req.body.title };
-  categories.push(category);
-
-  res.status(201).send(category);
-});
-
-app.put("/api/categories/:id", (req, res) => {
-  const { error } = validateCategory(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const category = categories.find((ctg) => ctg.id === parseInt(req.params.id));
-  if (!category) return res.status(404).send("Not found such category");
-  category.title = req.body.title;
-
-  res.send(category);
-});
-
-app.delete("/api/categories/:id", (req, res) => {
-  const category = categories.find((ctg) => ctg.id === parseInt(req.params.id));
-  if (!category) return res.status(404).send("Not found such category");
-
-  const categoryIndex = categories.indexOf(category);
-  categories.splice(categoryIndex, 1);
-
-  res.send(category);
-});
-
-function validateCategory(category) {
-  const schema = {
-    title: Joi.string().required().min(4),
-  };
-
-  return Joi.validate(category, schema);
-}
+mongoose
+  .connect("mongodb://localhost/programmingCourse", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connection is OK with Database");
+  })
+  .catch((err) => {
+    console.log("Connection is Error with Database", err);
+  });
 
 const port = process.env.PORT;
 app.listen(port, () => {
