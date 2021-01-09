@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const categoriesRoute = require("./routes/categories");
+const customersRoute = require("./routes/customer");
 const app = express();
 app.use(express.json());
 app.use("/api/categories", categoriesRoute);
+app.use("/api/customers", customersRoute);
+
 
 mongoose
   .connect("mongodb://localhost/programmingCourse", {

@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
   });
   const result = await category.save();
 
-  res.status(201).send(category);
+  res.status(201).send(result);
 });
 
 router.put("/:id", async (req, res) => {
@@ -73,7 +73,7 @@ router.put("/:id", async (req, res) => {
   if (!category) return res.status(404).send("Not found such category");
 
   const result = await category.save();
-  res.send(category);
+  res.send(result);
 });
 
 router.delete("/:id", async (req, res) => {
