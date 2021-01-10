@@ -19,9 +19,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
   const category = new Category({
     title: req.body.title,
-    author: req.body.author,
-    fee: req.body.fee,
-    isPublished: req.body.isPublished,
   });
   const result = await category.save();
 
@@ -36,9 +33,6 @@ router.put("/:id", async (req, res) => {
     req.params.id,
     {
       title: req.body.title,
-      author: req.body.author,
-      fee: req.body.fee,
-      isPublished: req.body.isPublished,
     },
     { new: true }
   );

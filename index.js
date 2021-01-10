@@ -2,10 +2,12 @@ const mongoose = require("mongoose");
 const express = require("express");
 const categoriesRoute = require("./routes/categories");
 const customersRoute = require("./routes/customer");
+const CoursesRoute = require("./routes/courses");
 const app = express();
 app.use(express.json());
 app.use("/api/categories", categoriesRoute);
 app.use("/api/customers", customersRoute);
+app.use("/api/courses", CoursesRoute);
 
 
 mongoose
