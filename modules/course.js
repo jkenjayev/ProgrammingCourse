@@ -45,3 +45,4 @@ const schema = new mongoose.Schema({
 
   exports.validate = validateCourse;
   exports.Course = Course;
+  exports.courseSchema = schema;

@@ -35,3 +35,4 @@ const schema = new mongoose.Schema({
 
   exports.validate = validateCustomer;
   exports.Customer = Customer;
+  exports.customerSchema = schema;
