@@ -21,6 +21,7 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     phone: req.body.phone,
     isVip: req.body.isVip,
+    bonusPoint: req.body.bonusPoint
   });
   const result = await customer.save();
 

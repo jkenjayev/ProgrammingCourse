@@ -1,7 +1,6 @@
 const { Enrollment, validate } = require("../modules/enrollment");
 const { Course } = require("../modules/course");
 const { Customer } = require("../modules/customer");
-const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
@@ -37,7 +36,7 @@ router.post("/", async (req, res) => {
   customer.bonusPoint ++;
   customer.save();
 
-  res.send(enrollment);
+  res.send(result);
 });
 
 // router.get("/:id", async (req, res) => {
