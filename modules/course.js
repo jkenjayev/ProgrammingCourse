@@ -25,6 +25,10 @@ const schema = new mongoose.Schema({
     },
     tags: {
       type: [String],
+    },
+    fee: {
+      type: Number,
+      required: true
     }
   });
   
@@ -37,7 +41,8 @@ const schema = new mongoose.Schema({
       trainer: Joi.string().required().min(5),
       status: Joi.string().required(),
       categoryId: Joi.string().required(),
-      tags: Joi.array().items(Joi.string())
+      tags: Joi.array().items(Joi.string()),
+      fee: Joi.number().required()
     };
   
     return Joi.validate(category, schema);

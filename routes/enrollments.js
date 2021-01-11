@@ -1,81 +1,47 @@
-const express = require("express");
+const { Enrollment, validate } = require("../modules/enrollment");
 const { Course } = require("../modules/course");
-const { Category } = require("../modules/category");
-const { validate, Enrollment } = require("../modules/enrollment");
+const { Customer } = require("../modules/customer");
+const mongoose = require("mongoose");
+const express = require("express");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const enrollments = await Enrollment.find().sort("title");
+  const enrollments = await Enrollment.find().sort('-dateStart');
   res.send(enrollments);
-});
-
-router.get("/:id", async (req, res) => {
-  const enrollment = await Enrollment.findById(req.params.id);
-  if (!enrollment)
-    return res.status(404).send("Oops! Not found such enrollment");
-
-  res.send(enrollment);
 });
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if(error) return res.status(400).send(error.details[0].message);
+
+  const customer = await Customer.findById(req.body.customerId);
+  if(!customer) return res.status(400).send("Not found such customer");
 
   const course = await Course.findById(req.body.courseId);
-  if (!course) return res.status(400).send("Not found such course");
-
-  const customer = await Category.findById(req.body.customerId);
-  if (!customer) return res.status(400).send("Not found such customer");
+  if(!course) return res.status(400).send("Not found such course");
 
   const enrollment = new Enrollment({
-    course: {
-      _id: course._id,
-      title: course.title,
-    },
     customer: {
       _id: customer._id,
-      title: customer.name,
+      name: customer.name
     },
-    courseFee: req.body.courseFee,
+    course: {
+      _id: course._id,
+      title: course.title
+    },
+    courseFee: course.fee,
   });
-  const result = await enrollment.save();
-
-  res.status(201).send(result);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const course = await Course.findById(req.body.courseId);
-  if (!course) return res.status(400).send("Not found such course");
-
-  const enrollment = await Enrollment.findByIdAndUpdate(
-    req.params.id,
-    {
-      course: {
-        _id: course._id,
-        title: course.title,
-      },
-      customer: {
-        _id: customer._id,
-        title: customer.name,
-      },
-      courseFee: req.body.courseFee,
-    },
-    { new: true }
-  );
-  if (!enrollment) return res.status(404).send("Not found such enrollment");
+  if(customer.isVip) enrollment.courseFee = course.fee - (0.2 * course.fee);
 
   const result = await enrollment.save();
-  res.send(result);
-});
-
-router.delete("/:id", async (req, res) => {
-  const enrollment = await Enrollment.findByIdAndRemove(req.params.id);
-  if (!enrollment) return res.status(404).send("Not found such enrollment");
+  customer.bonusPoint ++;
+  customer.save();
 
   res.send(enrollment);
 });
+
+// router.get("/:id", async (req, res) => {
+//   const enrollment = await Enrollment.find
+// });
 
 module.exports = router;

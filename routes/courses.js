@@ -31,6 +31,7 @@ router.post("/", async (req, res) => {
     trainer: req.body.trainer,
     tags: req.body.tags,
     status: req.body.status,
+    fee: req.body.fee
   });
   const result = await course.save();
 
@@ -55,6 +56,7 @@ router.put("/:id", async (req, res) => {
       trainer: req.body.trainer,
       tags: req.body.tags,
       status: req.body.status,
+      fee: req.body.fee
     },
     { new: true }
   );

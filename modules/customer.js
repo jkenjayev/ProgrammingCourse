@@ -17,7 +17,11 @@ const schema = new mongoose.Schema({
       type: Boolean,
       default: false,
       required: true,
+    },
+    bonusPoint: {
+      type: Number
     }
+
   });
   
   const Customer = mongoose.model("Customer", schema);
