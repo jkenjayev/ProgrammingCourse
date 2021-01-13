@@ -30,7 +30,7 @@ function validateUser(user) {
         email: Joi.string().required().min(3).max(255).email(),
     }
 
-    Joi.validate(user, schema);
+    return Joi.validate(user, schema);
 }
 
 exports.User = User;
