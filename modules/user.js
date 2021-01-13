@@ -12,7 +12,7 @@ const schema = mongoose.Schema({
         type: String,
         minlength: 8,
         required: true,
-        maxlength: 255
+        maxlength: 1024
     },
     email: {
         type: String,

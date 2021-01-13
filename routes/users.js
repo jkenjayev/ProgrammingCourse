@@ -1,5 +1,6 @@
 const express = require("express");
 const { validate, User } = require("../modules/user");
+const _ = require("lodash");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -9,14 +10,10 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     if(user) return res.status(400).send("Exist such user");
     
-    user = new User({
-        name: req.body.name,
-        password: req.body.password,
-        email: req.body.email
-    });
+    user = new User(req.body, ["name", "password", "email"]);
 
     const result = await user.save();
-    res.status(201).send(result);
+    res.status(201).send(_.pick(user, ["name", "password"]));
 });
 
 module.exports = router;
