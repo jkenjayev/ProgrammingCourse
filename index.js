@@ -5,6 +5,7 @@ const customersRoute = require("./routes/customer");
 const CoursesRoute = require("./routes/courses");
 const enrollmentsRoute = require("./routes/enrollments");
 const usersRouter = require("./routes/users");
+const authRoute = require("./routes/auth");
 const app = express();
 app.use(express.json());
 app.use("/api/categories", categoriesRoute);
@@ -12,6 +13,7 @@ app.use("/api/customers", customersRoute);
 app.use("/api/courses", CoursesRoute);
 app.use("/api/enrollments", enrollmentsRoute);
 app.use("/api/users", usersRouter);
+app.use("/api/login", authRoute);
 
 mongoose
   .connect("mongodb://localhost/programmingCourse", {
