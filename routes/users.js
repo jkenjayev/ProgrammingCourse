@@ -17,12 +17,12 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     if(user) return res.status(400).send("Exist such user");
     
-    user = new User(req.body, ["name", "password", "email"]);
+    user = new User(req.body, ["name", "password", "email", "isAdmin"]);
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(user.password, salt);
 
     const result = await user.save();
-    res.status(201).send(_.pick(user, ["name", "password"]));
+    res.status(201).send(_.pick(user, ["email", "password", "isAdmin"]));
 });
 
 module.exports = router;

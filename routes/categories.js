@@ -1,6 +1,7 @@
 const express = require("express");
 const { validate, Category } = require("../modules/category");
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -15,7 +16,7 @@ router.get("/:id", async (req, res) => {
   res.send(category);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const category = new Category({
