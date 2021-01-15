@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const config = require("config");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -15,7 +16,7 @@ router.post("/", async (req, res) => {
   const isValidPwd = await bcrypt.compare(req.body.password, user.password);
   if (!isValidPwd) return res.status(400).send("Email or password is wrong");
 
-  const token = jwt.sign({_id: user._id}, "bumeningparolim");
+  const token = user.generateAuthToken();
   res.header("x-auth-token", token).send(true);
 });
 
