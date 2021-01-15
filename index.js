@@ -28,7 +28,6 @@ mongoose
   });
 
 app.use(express.json());
-
 app.use("/api/categories", categoriesRoute);
 app.use("/api/customers", customersRoute);
 app.use("/api/courses", CoursesRoute);

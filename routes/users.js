@@ -3,6 +3,12 @@ const { validate, User } = require("../modules/user");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const router = express.Router();
+const auth = require("../middleware/auth");
+
+router.get("/me", auth, async (req, res) => {
+    const user = await User.findById(req.user._id).select("-password");
+    res.send(user);
+})
 
 router.post("/", async (req, res) => {
     const { error } = validate(req.body);
